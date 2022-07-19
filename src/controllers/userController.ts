@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getUsers } from '../repositories/userRepository.js';
-import { signUpService } from '../services/userServices.js';
+import { signInService, signUpService } from '../services/userServices.js';
 
 export async function getUsersController(req:Request, res: Response) {
   const userInfo = req.body;
@@ -16,4 +16,13 @@ export async function signUpController(req: Request, res: Response) {
     throw { code: 500, message: 'Could not register user. Please try again'};
   }
   res.status(201).send(insertedUser);
+}
+
+export async function signInController( req: Request, res: Response) {
+  const userInfo = req.body;
+  const token = await signInService(userInfo);
+  if(!token) {
+    throw { code: 500, message: 'Could not login. Please try again'};
+  }
+  res.status(200).send({token});
 }

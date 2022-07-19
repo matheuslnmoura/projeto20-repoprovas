@@ -6,7 +6,7 @@ export function validateSignupInfo(req: Request, res: Response, next: NextFuncti
   const userInfo = req.body;
   const userInfoSchema = joi.object({
     email: joi.string().email().required(),
-    password: joi.string().min(10).required(),
+    password: joi.string().min(4).required(),
     confirmPassword: joi.string().required().valid(joi.ref('password')),
 
   });
@@ -18,6 +18,24 @@ export function validateSignupInfo(req: Request, res: Response, next: NextFuncti
     if(error.message === '"confirmPassword" must be [ref:password]') {
       throw{code: 422, message: 'Passwords must match'};
     }
+    throw{code: 422, message: error.message};
+  }
+
+  next();
+}
+
+export function validateSigninInfo( req: Request, res: Response, next: NextFunction){ 
+  const userInfo = req.body;
+  const userInfoSchema = joi.object({
+    email: joi.string().email().required(),
+    password: joi.string().min(4).required(),
+
+  });
+
+  const { error } = userInfoSchema.validate(userInfo, {abortEarly: false});
+
+  if(error) {
+    console.log(chalk.bold.red(error));
     throw{code: 422, message: error.message};
   }
 
