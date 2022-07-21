@@ -10,6 +10,12 @@ export async function findUserByEmail(email: string) {
   });
 }
 
+export async function findUserById(id: number) {
+  return await db.user.findUnique({
+    where: {id}
+  });
+}
+
 export async function insertUser(email: string, hashPassword: string) {
   return await db.user.create({
     data: {
