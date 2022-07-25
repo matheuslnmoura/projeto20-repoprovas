@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 
 
 async function main() {
+  console.log('entrou aqui');
   await createUsers();
   await createTerms();
   await createCategories();

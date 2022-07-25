@@ -7,7 +7,7 @@ export function validateExamsInfo( req: Request, res: Response, next: NextFuncti
   const examInfoSchema = joi.object({
     name: joi.string().required(),
     pdfUrl: joi.string().uri().required(),
-    categoryId: joi.number().integer().required(),
+    categoryId: joi.number().integer().max(3).required(),
     disciplineId: joi.number().integer().required(),
     teacherId: joi.number().integer().required()
 

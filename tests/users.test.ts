@@ -1,15 +1,10 @@
 import app from '../src/app.js';
 import supertest from 'supertest';
-import { faker } from '@faker-js/faker';
 import db from '../src/config/database.js';
 import { signUp, unMatchedPasswordSignUp } from './factory/userFactory.js';
 
-const email = faker.internet.email();
-const password = faker.internet.password();
-const confirmPassword = password;
-
 beforeEach(async()=>{
-  await db.$executeRaw`DELETE FROM users WHERE email = ${email}`;
+  await db.$executeRaw`DELETE FROM users`;
 });
 
 describe('POST /sign-up', ()=>{
@@ -110,6 +105,6 @@ describe('POST /sign-in', ()=>{
 
 
 afterAll(async()=>{
-  await db.$executeRaw`TRUNCATE table users`;
+  // await db.$executeRaw`TRUNCATE table users`;
   await db.$disconnect();
 });

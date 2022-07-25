@@ -3,6 +3,7 @@ import { getAllExamsGroupedByTeacherService, getAllExamsGroupedByTermsService, g
 
 export async function postExamController(req: Request, res: Response) {
   const examInfo = req.body;
+  console.log(examInfo);
   const postedExam = await postExamService(examInfo);
   res.status(201).send(postedExam);
 }

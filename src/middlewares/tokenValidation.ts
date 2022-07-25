@@ -32,8 +32,12 @@ export default async function verifyToken(req: Request, res: Response, next: Nex
     next();
     
   } catch (error) {
+    console.log(error.name);
     if(error.name === 'TokenExpiredError') {
       return res.status(401).send('Token Expired. Login again');
+    }
+    if(error.name === 'JsonWebTokenError') {
+      return res.status(401).send('Invalid Token. Login again');
     }
     return res.sendStatus(500);
   }
