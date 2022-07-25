@@ -2,6 +2,7 @@ import app from '../src/app.js';
 import supertest from 'supertest';
 import { faker } from '@faker-js/faker';
 import db from '../src/config/database.js';
+import { signUp, unMatchedPasswordSignUp } from './factory/userFactory.js';
 
 const email = faker.internet.email();
 const password = faker.internet.password();
@@ -13,36 +14,31 @@ beforeEach(async()=>{
 
 describe('POST /sign-up', ()=>{
   it('given an email, password and confirmPassword inputs, should return status 201 when sign-up is succesfull', async ()=>{
+    const userInfo = signUp();
     const response = await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword
+      ...userInfo
     });
     expect(response.status).toEqual(201);
   });
 
   it('given an email, password and confirmPassword inputs, should return status 401 when email is already registred', async ()=>{
     //////////////setup//////////////
+    const userInfo = signUp();
     await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword
+      ...userInfo
     });
     //////////////setup//////////////
 
     const response = await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword
+      ...userInfo
     });
     expect(response.status).toEqual(401);
   });
 
   it('given an email, password and confirmPassword inputs, should return status 422 when passwords don\'t match', async ()=>{
+    const userInfo = unMatchedPasswordSignUp();
     const response = await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword: 'wrong_password'
+      ...userInfo
     });
     expect(response.status).toEqual(422);
   });
@@ -51,47 +47,44 @@ describe('POST /sign-up', ()=>{
 describe('POST /sign-in', ()=>{
   it('given an resgistred email and password inputs, should return status 200 when user sign-in is succesfull', async ()=>{
     //////////////setup//////////////
+    const userInfo = signUp();
     await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword
+      ...userInfo
     });
     //////////////setup//////////////
 
     const response = await supertest(app).post('/sign-in').send({
-      email, 
-      password
+      email: userInfo.email,
+      password: userInfo.password
     });
     expect(response.status).toEqual(200);
   });
 
   it('given an unresgistred email and password inputs, should return status 404', async ()=>{
     //////////////setup//////////////
+    const userInfo = signUp();
     await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword
+      ...userInfo
     });
     //////////////setup//////////////
     
     const response = await supertest(app).post('/sign-in').send({
       email: 'some_email@email.com', 
-      password
+      password: userInfo.password
     });
     expect(response.status).toEqual(404);
   });
 
   it('given an resgistred email and a wrong password inputs, should return status 401 ', async ()=>{
     //////////////setup//////////////
+    const userInfo = signUp();
     await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword
+      ...userInfo
     });
     //////////////setup//////////////
 
     const response = await supertest(app).post('/sign-in').send({
-      email, 
+      email: userInfo.email, 
       password: 'not_the_right_password'
     });
     expect(response.status).toEqual(401);
@@ -99,16 +92,15 @@ describe('POST /sign-in', ()=>{
 
   it('given an resgistred email and password inputs, should return an object with a property named \'token\' and this property shall not be null', async ()=>{
     //////////////setup//////////////
+    const userInfo = signUp();
     await supertest(app).post('/sign-up').send({
-      email,
-      password,
-      confirmPassword
+      ...userInfo
     });
     //////////////setup//////////////
 
     const response = await supertest(app).post('/sign-in').send({
-      email, 
-      password
+      email: userInfo.email, 
+      password: userInfo.password
     });
     expect(response.body.token).toBeDefined();
   });
