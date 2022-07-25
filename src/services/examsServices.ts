@@ -1,5 +1,4 @@
-import { Category, Disciplines, Teacher, Tests } from '@prisma/client';
-import { findByTeacherAndDisciplinesId, getAllCategories, getAllExamsGroupedByTeacher, getAllExamsGroupedByTerms, insertExam, testByTeacher, testsByTeacher } from '../repositories/examRepository.js';
+import { findByTeacherAndDisciplinesId, getAllCategories, getAllExamsGroupedByTeacher, getAllExamsGroupedByTerms, insertExam} from '../repositories/examRepository.js';
 
 type examInfo = {
   name: string;

@@ -74,19 +74,6 @@ export async function getAllExamsGroupedByTeacher() {
         }
       }
     }
-    // include: {
-    //   disciplines: {
-    //     include: {
-    //       term:{}
-    //     }
-    //   },
-    //   teacher: {},
-    //   tests:{
-    //     include:{
-    //       category:{}
-    //     }
-    //   }
-    // }
   });
 }
 
