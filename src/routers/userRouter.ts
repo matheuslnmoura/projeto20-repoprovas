@@ -5,7 +5,7 @@ import { validateSigninInfo, validateSignupInfo } from '../middlewares/userValid
 const userRouter = Router();
 
 userRouter.get('/users', getUsersController);
-userRouter.post('/signup', validateSignupInfo, signUpController);
-userRouter.post('/signin', validateSigninInfo, signInController);
+userRouter.post('/sign-up', validateSignupInfo, signUpController);
+userRouter.post('/sign-in', validateSigninInfo, signInController);
 
 export default userRouter;
